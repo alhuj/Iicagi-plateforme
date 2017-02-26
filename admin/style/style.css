@@ -1,0 +1,43 @@
+.btnConnecter {
+    border-radius: 3px;
+    position: relative;
+    width: 30%;
+    background: #77838d;
+    border: 0;
+    padding: 2%;
+    font-family: 'Open Sans',sans-serif;
+    font-size: 100%;
+    color: #fff;
+    cursor: pointer;
+    transition: background .3s;
+    -webkit-transition: background .3s;
+}
+.activemenu{
+	font-size:25px;
+	border-bottom:#09C 3px solid;
+}
+.block1{
+	margin:15px;
+	padding:5px;
+}
+.ligneAside{
+	background-color:#333;
+	padding-top:30px;
+	padding-bottom:30px;
+}
+.cadreArticle{
+	padding: 75px;
+}
+strong{
+	font-family:Verdana, Geneva, sans-serif;
+	color:#CCC;
+}
+blockquote{
+	border-bottom:#CCC 2px dashed;
+	
+}
+.textareaFix{
+	resize:none;
+	height:150px !important;
+	width:450px !important;
+}
