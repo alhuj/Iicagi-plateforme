@@ -24,8 +24,7 @@ echo"
 
 	<div class='col-md-4'>
 		<div class='list-group'>
-			<a href='chercheUti.php?id=".$idGrp."' class='list-group-item'>Ajouter Utilisateurs</a>
-			<a href='../Groupe/ajouter_sujet.php?id=".$idGrp."' class='list-group-item'>Poser Question</a>
+			<button class='btn btn-lg btn-primary' onclick='newSujetGrp(".$idGrp.")'>Poser Question</button>
 		</div>
 ";
 $uti = new uti_gr();

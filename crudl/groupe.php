@@ -121,12 +121,12 @@ class groupe{
 
 				else{
 					$req = mysql_query("INSERT INTO groupe (libelleGrp, descGrp, idTypGrp, idUti) VALUES('$libelleGrp','$descGrp',2,'$idUti')") or die (mysql_error());
-					$resultat = mysql_query("SELECT LAST_INSERT_ID() createur FROM groupe");
+					$resultat = mysql_query("SELECT LAST_INSERT_ID() derGrp FROM groupe");
 					$row = mysql_fetch_array($resultat);
-					$idCreateur = $row['createur'];
-					$req2 = mysql_query("INSERT INTO utilisateur_groupe (idGrp,idUti) VALUES($idCreateur,$idUti)");
+					$idlastGrp = $row['derGrp'];
+					$req2 = mysql_query("INSERT INTO utilisateur_groupe (idGrp,idUti) VALUES($idlastGrp,$idUti)");
 					if($req && $req2){
-				 	echo'<script>alert("Ajout reussi!!!"); indexRedir()</script>';
+				 	echo'<script>alert("Ajout reussi!!!"); grpRedir('.$idlastGrp.')</script>';
 					}
 				}
 			}

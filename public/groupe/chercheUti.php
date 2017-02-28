@@ -3,7 +3,7 @@ include('../../config.php');
 $titre="Recherche Utilisateurs";
 include('../includes/debut.php');
 include('../includes/menuGroupe.php');
-include('../../crudl/utilisateur_groupe.php');
+include('../../crudl/uti_gr.php');
 
 echo"
 <h3>Rechercher des utilisateurs</h3>
@@ -18,8 +18,6 @@ echo"
 		</span>
 </div>
 </form>
-</div>
-</div>
 ";
 
 if(isset($_POST['submit'])){
@@ -39,7 +37,18 @@ if(isset($_POST['submit'])){
 	  <form method='POST' action='ajouterUti.php?id=".$_GET['id']."'>
 	  ";
 
-	  while($row=mysql_fetch_array($result)){
+		if(mysql_num_rows($result)== 0){
+				echo '
+							<div class="alert alert-danger">
+							<i class="icon icon-times-circle icon-lg"></i>
+							<strong>Erreur !</strong> Aucun resultat trouve.
+							</div>
+</div>
+</div>
+
+							';
+		} else {
+		while($row=mysql_fetch_array($result)){
 	          $idUti=$row['idUti'];
 	          $pseudo=$row['pseudo'];
 	          $nomUti=$row['nom'];
@@ -55,12 +64,12 @@ if(isset($_POST['submit'])){
 	  </form>
 	  ";
 	  }
+	}
 	  else{
 	  		echo("<script>alert('Veuillez Saisir un mot clé s'il vous plait.');</script>") ;
 
 	  }
 	  }
-
 /*if(isset($_POST['ajouter'])){
 $uti = new utilisateur_groupe();
 $uti->ajoute();

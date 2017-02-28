@@ -9,7 +9,6 @@ class uti_gr{
       <span class="title">Utilisateurs</span>
       <ul class="pull-right c-controls">
           <li><a href="chercheUti.php?id='.$_GET['id'].'" title="Ajouter Utilisateurs"><i class="glyphicon glyphicon-plus"></i></a></li>
-          <li><a href="#" class="hide-search" data-command="toggle-search" data-toggle="tooltip" data-placement="top" title="Toggle Search"><i class="fa fa-ellipsis-v"></i></a></li>
       </ul>
   </div>
 
@@ -77,7 +76,7 @@ function ajoute(){
 	echo "
        <script>
 			Javascript:alert('Utilisateurs Ajoutés.');
-			indexRedir();
+			grpRedir(".$idGrp.");
        </script>
 	";
 	}

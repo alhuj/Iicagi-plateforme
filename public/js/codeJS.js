@@ -39,7 +39,9 @@
 	function newSujet(){
 		document.location='ajouter_sujet.php?id=1';
 	}
-
+  function newSujetGrp(id){
+		document.location='ajouter_sujet.php?id='+id;
+	}
 
 
 	function ouvrirEnrg(id){
@@ -58,4 +60,9 @@
 function lienModif(){
 	document.getElementById('form').style.display = 'block';
     document.getElementById('quest').style.display = 'none';
+}
+
+
+function grpRedir(id){
+  document.location='affiche.php?id='+id;
 }
