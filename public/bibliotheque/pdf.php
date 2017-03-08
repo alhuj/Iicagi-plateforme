@@ -14,16 +14,18 @@ $art = new article();
 			echo'<div class="row">';
 
 		while($aff1=mysql_fetch_array($req1)){
- echo' <div class="col-md-6">
-    <div class="thumbnail">
-    <iframe  width="490" height="600" src="http://localhost/plateforme/banque de donnees/article/'.$aff1['lienArt'].'" frameborder="0" allowfullscreen></iframe>
-      <div class="caption">
-        <h3>'.$aff1['libelleArt'].'</h3>
-        <p>'.$aff1['descArt'].'</p>
-        <p><a href="#" class="btn btn-primary" role="button">Voir plus...</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
-      </div>
-    </div>
-  </div>';
+			$req2=mysql_query('select * from utilisateur where idUti='.$aff1['idUti']) or die(mysql_error());
+			$aff2=mysql_fetch_array($req2);
+ 			echo' <div class="col-md-6">
+		    <div class="thumbnail">
+		    <iframe  width="490" height="600" src="http://localhost/plateforme/banque de donnees/article/'.$aff1['lienArt'].'" frameborder="0" allowfullscreen></iframe>
+		      <div class="caption">
+		        <h3>'.$aff1['libelleArt'].'</h3>
+		        <p>'.$aff1['descArt'].'<br><i>Mis en ligne par </i><b>'.$aff2['pseudo'].'</b><i> le </i><b>'.$aff1['datePub'].'</b></p>
+		        <p><a href="#" class="btn btn-primary" role="button">Voir plus...</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+		      </div>
+		    </div>
+		  </div>';
    }
    echo'</div>
 ';

@@ -114,13 +114,6 @@ function avatar($avatar){
 	else echo $avatar;
 }
 
-function avatarGrp($avatar){
-
-	if(empty($avatar)){
-		echo 'defaultGrp.png';
-	}
-	else echo $avatar;
-}
 
 
 

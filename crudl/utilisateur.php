@@ -11,6 +11,7 @@ class utilisateur{
     <thead>
         <tr class='active'>
             <th>#</th>
+            <th>Avatar</th>
             <th>Nom</th>
             <th>Prenom</th>
             <th>Date de naissance</th>
@@ -34,8 +35,9 @@ class utilisateur{
 						if($r2)$aff2=mysql_fetch_array($r2);
 					  echo	'<tr>
 					  		<th onclick="ouvrirEnrg('.$affich['idUti'].')">'.$affich['idUti'].'</th>
-							<th onclick="ouvrirEnrg('.$affich['idUti'].')">'.$affich['nom'].
-							'</th><th onclick="ouvrirEnrg('.$affich['idUti'].')">'.$affich['prenom'].
+							<th onclick="ouvrirEnrg('.$affich['idUti'].')"><img src="http://localhost/plateforme/banque de donnees/utilisateur avatar/'.$affich['avatar'].'" style="display:block; height:80px; width:100px" class="img-responsive img-thumbnail" /></th><th onclick="ouvrirEnrg('.$affich['idUti'].')">'.$affich['nom'].
+							'
+							</th><th onclick="ouvrirEnrg('.$affich['idUti'].')">'.$affich['prenom'].
 							'</th><th onclick="ouvrirEnrg('.$affich['idUti'].')">'.$affich['dateNaiss'].
 							'</th><th onclick="ouvrirEnrg('.$affich['idUti'].')">'.$affich['lieuNaiss'].
 							'</th><th onclick="ouvrirEnrg('.$affich['idUti'].')">'.$affich['pseudo'].
@@ -80,6 +82,7 @@ echo"
 		<form class='form-inline'>  
 		<label>Id: </label><br /><input disabled class='form-control' value='".$affiche['idUti']."' type='text' name='idUti' /><br />
 		<label>Dernière connexion: </label><br /><input disabled class='form-control' value='".$affiche['dateDerConn']."' type='text' name='dateDerConn' /><br />
+		<label>Avatar: <a href='indesirable avatar.php?id=".$affiche['idUti']."'>(Indésirable)</a></label><br /><img src='http://localhost/plateforme/banque de donnees/utilisateur avatar/".$affiche['avatar']."' style='display:block; height:100px; width:100px' class='img-responsive img-thumbnail' /><br />
 		<label>Nom: </label><br /><input disabled class='form-control' value='".$affiche['nom']."' type='text' name='nom' /><br />
 		<label>Prenom: </label><br /><input disabled class='form-control' value='".$affiche['prenom']."' type='text' name='prenom' /><br />
 		<label>Date de naissance: </label><br /><input disabled class='form-control' value='".$affiche['dateNaiss']."' type='text' name='dateNaiss' /><br />
@@ -93,7 +96,6 @@ echo"
 		<label>Niveau: </label><br /><input disabled class='form-control' value='".$affiche2['libelleNiv']."' type='text' name='niveau' /><br />
 		<label>Pseudo: <a href='indesirable pseudo.php?id=".$affiche["idUti"]."'>(Indésirable)</a></label><br /><input disabled class='form-control' value='".$affiche['pseudo']."' type='text' name='pseudo' /><br />
 		<label>Mot de passe: <a href='mot de passe oublie.php?id=".$affiche['idUti']."'>(Mot de passe oublié)</a></label><br /><input disabled class='form-control' value='".$affiche['pass']."' type='text' name='pass' /><br />
-		<label>Avatar: <a href='indesirable avatar.php?id=".$affiche['idUti']."'>(Indésirable)</a></label><br /><img src='http://localhost/it-school/banque de donnees/utilisateur avatar/".$affiche['avatar']."' style='display:block; height:100px; width:100px' class='img-responsive img-thumbnail' /><br />
 		<label>Description: <a href='indesirable description.php?id=".$affiche['idUti']."'>(Indésirable)</a></label><br /><textarea disabled class='form-control textareaFix'  name='description'> ".$affiche['description']."</textarea><br /><br />
 				</form>
 		<button onclick='btnModif(".$affiche['idUti'].")' class='btn btn-warning'><h5>Modifier</h5></button>

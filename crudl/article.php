@@ -16,7 +16,7 @@ class article{
     </thead>
     <tfoot>
         <tr>";
-			$re = mysql_query('SELECT COUNT(*) AS nbr FROM article');
+			$re = mysql_query('SELECT COUNT(*) AS nbr FROM article WHERE idGrp=1');
 			$aff = mysql_fetch_array($re);
 		echo"
             <td class='text-center active' colspan='5'>Le nombre de articles est de: ".$aff['nbr']."</td>
@@ -57,7 +57,7 @@ class article{
 				$descArt = $_POST['descArt'];
 				$idUti = $_SESSION['idUti'];
 				$idTypArt =6;
-				$resultat = mysql_query("INSERT INTO article (libelleArt, lienArt, descArt, idTypArt, idUti) VALUES('$libelleArt', '$lienArt', '$descArt', '$idTypArt', '$idUti')") or die(mysql_error());
+				$resultat = mysql_query("INSERT INTO article (libelleArt, lienArt, descArt, idTypArt, idUti, idGrp) VALUES('$libelleArt', '$lienArt', '$descArt', '$idTypArt', '$idUti', 1)") or die(mysql_error());
 				if($resultat){
 				 echo'<script>alert("Ajout reussi!!!");indexRedir()</script>';
 				}else echo'<script>alert("probleme requete!!!");indexRedir()</script>';

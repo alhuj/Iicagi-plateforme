@@ -1,17 +1,27 @@
 
-   function voirPoste(idQu){
+    function voirPoste(idQu){
 		document.location='voir_poste.php?idQu='+idQu;
 	}
 
+	function newPartGrp(idGrp){
+		document.location='partage.php?id='+idGrp;
+	}
+
    function btnModifQu(idQu){
-	   var val=(confirm("Voulez-vous Modifier le sujet??????"))?true:false;
+	   var val=(confirm("Voulez-vous modifier le sujet??????"))?true:false;
 	   if(val==true){
 	   	document.location='modifier_Qu.php?idQu='+idQu;
+	   }
+   }   
+   function btnModifGr(idGrp){
+	   var val=(confirm("Voulez-vous modifier le groupe?"))?true:false;
+	   if(val==true){
+	   	document.location='modifierGr.php?id='+idGrp;
 	   }
    }
 
 	function btnModifPo(idQu,idPo){
-		var val=(confirm("Voulez-vous Modifier cette reponse??????"))?true:false;
+		var val=(confirm("Voulez-vous modifier cette reponse??????"))?true:false;
 		if(val==true){
 	   		document.location='modifier_Po.php?idQu='+idQu+'&&idPo='+idPo;
 	   }
@@ -21,6 +31,12 @@
 		var val=(confirm("Voulez-vous supprimer votre sujet??????"))?true:false;
 		if(val==true){
 	   		document.location='supprimerQu.php?idQu='+idQu;
+		}
+	}	
+	function btnSuppGr(idGrp){
+		var val=(confirm("Voulez-vous vraiment supprimer le groupe?"))?true:false;
+		if(val==true){
+	   		document.location='supprimerGr.php?id='+idGrp;
 		}
 	}
 
@@ -49,7 +65,7 @@
 	}
 
 	function btnResol(idQu){
-		var val=(confirm("Voulez-vous vraiment Resoudre ce sujet??????"))?true:false;
+		var val=(confirm("Voulez-vous vraiment resoudre ce sujet??????"))?true:false;
 		if(val==true){
 			document.location='resolu.php?id='+idQu;
 		}

@@ -47,9 +47,7 @@ class groupe{
 					while($affich = mysql_fetch_array($req)){
 						echo	"<tr>
 							<th class='text-capitalize'>
-								<img src='http://localhost/plateforme/banque de donnees/groupe avatar/";
-								avatarGrp($affich['avatarGrp']);
-						echo	"' style='display:block; height:60px; width:60px;' class='img-responsive profile-image img-rounded'' />
+								<img src='http://localhost/plateforme/banque de donnees/groupe avatar/".$affich['avatarGrp']."' style='display:block; height:60px; width:60px;' class='img-responsive profile-image img-rounded'' />
 							</th>
 							<th onclick='ouvrirEnrg(".$affich['idGrp'].")'>".$affich['libelleGrp']."</th>
 							<th onclick='ouvrirEnrg(".$affich['idGrp'].")'>".$affich['descGrp']."</th>
@@ -133,22 +131,64 @@ class groupe{
 	}
 
 	public function modifier(){
-		if(isset($_POST['submit'])){
-			$idGrp = $_POST['idGrp'];
-			$libelleGrp = mysql_real_escape_string(htmlspecialchars($_POST['libelleGrp']));
-			$descGrp = mysql_real_escape_string(htmlspecialchars($_POST['descGrp']));
-			$resultat = mysql_query("UPDATE groupe SET libelleGrp = '$libelleGrp', descGrp = '$descGrp' WHERE idGrp = ".$idGrp) or die( mysql_error());
-			if($resultat)
-			{
-				echo("<script>alert('La modification à été effectuée avec succes.');indexRedir();</script>") ;
+			if(isset($_POST['submit'])){
 
-			}
-			else
-			{
-				echo("<script>alert('La modification à échouée.')</script>") ;
+				if(isset($_FILES['avatar'])){
+						$idGrp = $_POST['idGrp'];
+						$libelleGrp = mysql_real_escape_string(htmlspecialchars($_POST['libelleGrp']));
+						$descGrp = mysql_real_escape_string(htmlspecialchars($_POST['descGrp']));
+						$dossier = '../../banque de donnees/groupe avatar/';
+						$fichier = basename($_FILES['avatar']['name']);
+						$taille_maxi = 1000000;
+						$taille = filesize($_FILES['avatar']['tmp_name']);
+						$extensions = array('.png', '.gif', '.jpg', '.jpeg');
+						$extension = strrchr($_FILES['avatar']['name'], '.'); 
+						//Début des vérifications de sécurité...
+						if(!in_array($extension, $extensions)) //Si l'extension n'est pas dans le tableau
+						{
+							 $erreur = 'Vous devez uploader un fichier de type png, gif, jpg, jpeg...';
+						}
+						if($taille>$taille_maxi)
+						{
+							 $erreur = 'Le fichier est trop gros...';
+						}
+						if(!isset($erreur)) //S'il n'y a pas d'erreur, on upload
+						{
+							 if(move_uploaded_file($_FILES['avatar']['tmp_name'], $dossier.$libelleGrp.$extension)) //Si la fonction renvoie TRUE, c'est que ça a fonctionné...
+							 {
+								  $avatarGrp=$libelleGrp.$extension;
+								  $req=mysql_query("UPDATE groupe SET avatarGrp = '$avatarGrp', libelleGrp = '$libelleGrp', descGrp = '$descGrp' WHERE idGrp = ".$idGrp) or die(mysql_error());
+								  if($req){
+									  echo '<script>alert("Upload effectué avec succès !");grpRedir('.$idGrp.');</script>';
+									 
+								  }
+							 }
+							 else //Sinon (la fonction renvoie FALSE).
+							 {
+								  echo '<script>alert("Echec de l\'upload !");</script>';
+							 }
+						}
+						else
+						{
+							 echo '<script>alert("'.$erreur.'");</script>';
+						}
+				}elseif(!isset($_FILES['avatar'])) {
+					$idGrp = $_POST['idGrp'];
+					$libelleGrp = mysql_real_escape_string(htmlspecialchars($_POST['libelleGrp']));
+					$descGrp = mysql_real_escape_string(htmlspecialchars($_POST['descGrp']));
+					$resultat = mysql_query("UPDATE groupe SET libelleGrp = '$libelleGrp', descGrp = '$descGrp' WHERE idGrp = ".$idGrp) or die( mysql_error());
+					if($resultat)
+					{
+						echo("<script>alert('La modification à été effectuée avec succes.');indexRedir();</script>") ;
 
+					}
+					else
+					{
+						echo("<script>alert('La modification à échouée.')</script>") ;
+
+					}
+				}			
 			}
-		}
 	}
 	public function supprimer(){
 			if(isset($_GET['id'])){
@@ -166,32 +206,40 @@ class groupe{
 
 	public function affiche(){
 			$idGrp=$_GET['id'];
-			$req = mysql_query("SELECT libelleGrp, descGrp, DATE_FORMAT(dateCreatGrp, '%d/%m/%Y à %Hh:%i') dateCreatGrp, avatarGrp
+			$req = mysql_query("SELECT libelleGrp, descGrp, DATE_FORMAT(dateCreatGrp, 'Créé le %d/%m/%Y à %Hh:%i') dateCreatGrp, avatarGrp, idUti
 													FROM groupe where idGrp=$idGrp");
 			$affiche=mysql_fetch_array($req);
-			$avatar=$affiche['avatarGrp'];
 			if($affiche){
 				echo"
 				<section>
 					<div class='media'>
 		  			<div class='media-left'>
-							<img src='http://localhost/plateforme/banque de donnees/groupe avatar/";
-							avatarGrp($avatar);
-				echo	"' style='display:block; height:200px; width:300px' />
+							<img src='http://localhost/plateforme/banque de donnees/groupe avatar/".$affiche['avatarGrp']."' style='display:block; height:200px; width:300px' />
 						</div>
+
 						<div class='media-body'>
 							<h2>".$affiche['libelleGrp']."</h2>
-							<p>".$affiche['dateCreatGrp']."</p>
+							<p><b><i>".$affiche['dateCreatGrp']."</i></b></p>
 							<h3>".$affiche['descGrp']."</h3>
+						</div>";
+					if($_SESSION['id']==$affiche['idUti']){
+						echo"<br>
+							<div class='list-group'>
+								<button class='btn btn-lg btn-inverse' onclick='newSujetGrp(".$idGrp.")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Poser Question</button>
+								<button class='btn btn-lg btn-inverse' onclick='newPartGrp(".$idGrp.")'><span class='glyphicon glyphicon-share' aria-hidden='true'></span> Partager</button>
+								<button class='btn btn-lg btn-inverse' onclick='btnModifGr(".$idGrp.")'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span> Modifier</button>
+								<button class='btn btn-lg btn-inverse' onclick='btnSuppGr(".$idGrp.")'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span> Supprimer</button>
+							</div>";
+						}
+						echo"
 						</div>
-					</div>
-				</section>
-				";
+					</section>
+					";
 			}
 
 	$resutat = mysql_query("SELECT * FROM question WHERE idGrp=".$_GET['id']) or die(mysql_error());
 	if(mysql_num_rows($resutat)== 0){
- 					  echo "<tr><th>Il n'y a pas encore de questions dans ce groupe........</th></tr>
+ 					  echo "<tr><th><h1>Il n'y a pas encore de discussions dans ce groupe........</H1></th></tr>
 							</tbody>
 							</table>";
 					}else{
@@ -273,6 +321,60 @@ while($affich = mysql_fetch_array($req1)){
 	}
 	}
 
+public function partager(){
+	if(isset($_POST['partager'])){				
+				$lienArt='';
+				$libelleArt = $_POST['libelleArt'];
+				$descArt = $_POST['descArt'];
+				$idUti = $_SESSION['idUti'];
+				$idGrp = $_POST['idGrp'];
+				$i=0;
+				$idTypArt = 7;
+				//upload article
+						$extension = strrchr($_FILES['article']['name'], '.'); 
+						$dossier = '../../banque de donnees/article/';
+						$fichier = basename($_FILES['article']['name']);
+						$chaine= date('YmdHis');						
+						$extensions = array('.doc', '.docx', '.jpg', '.jpeg', '.png', '.pdf', '.mp4', 'mp3');
+						$extension = strrchr($_FILES['article']['name'], '.'); 
+						// Début des vérifications de sécurité...
+						if(!in_array($extension, $extensions)) //Si l'extension n'est pas dans le tableau
+						{
+							 $erreur = 'Vous devez uploader un fichier de type doc, docx,pdf, png, jpg, jpeg...';
+						}
+						if($i==0)$erreur = 'Désolé, le type de fichier sélectionner ne pas être ajout dans la bibliothèque...';
+						 
+						//Début des vérifications de sécurité...
+								$taille_maxi = 500000000;
+								$taille = filesize($_FILES['article']['tmp_name']);
+								if($taille>$taille_maxi)
+								{
+									 $erreur = 'Le fichier est trop gros...';
+								}
+								if(!isset($erreur)) //S'il n'y a pas d'erreur, on upload
+								{
+									 if(move_uploaded_file($_FILES['article']['tmp_name'], $dossier.$_SESSION['pseudo'].$chaine.$extension)) //Si la fonction renvoie TRUE, c'est que ça a fonctionné...
+									 {
+										  
+										$lienArt =$_SESSION['pseudo'].$chaine.$extension;
+										$resultat = mysql_query("INSERT INTO article (libelleArt, lienArt, descArt, idTypArt, idUti, idGrp) VALUES('$libelleArt', '$lienArt', '$descArt', '$idTypArt', '$idUti', '$idGrp')") or die(mysql_error());
+				if($resultat){
+				 echo'<script>alert("Document partager!!!");grpRedir('.$idGrp.')</script>';
+				}
+
+ 									 }
+									 else //Sinon (la fonction renvoie FALSE).
+									 {
+										  echo '<script>alert("Echec de l\'upload !")</script>';
+									 }
+								}
+								else
+								{
+									 echo '<script>alert("'.$erreur.'");</script>';
+								}
+		//fin upload article
+}
+}
 
 }//fin classe groupe
 ?>

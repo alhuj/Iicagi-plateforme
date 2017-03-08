@@ -7,6 +7,7 @@ class groupe{
     <thead>
         <tr class='active'>
             <th>#</th>
+            <th>Avatar</th>
             <th>Libellé</th>
             <th class='text-muted'>Description</th>
             <th>Modifier</th>
@@ -29,6 +30,8 @@ class groupe{
 					while($affich = mysql_fetch_array($req)){
 					  echo	"<tr>
 					  		<th onclick='ouvrirEnrg(".$affich['idGrp'].")'>".$affich['idGrp']."</th>
+
+					  		<th onclick='ouvrirEnrg(".$affich['idGrp'].")'><img  src='http://localhost/plateforme/banque de donnees/groupe avatar/".$affich['avatarGrp']."' style='display:block; height:70px; width:100px' class='img-responsive img-thumbnail'/></th>
 							<th onclick='ouvrirEnrg(".$affich['idGrp'].")'>".$affich['libelleGrp'].
 							"</th><th onclick='ouvrirEnrg(".$affich['idGrp'].")' class='text-muted'>".$affich['descGrp']."</th>
 							<th><button onclick='btnModif(".$affich['idGrp'].")' class='btn btn-warning'>Modifier</button></th>
@@ -87,6 +90,10 @@ class groupe{
 	public function affiche(){
 			$req = mysql_query('SELECT * FROM groupe where idGrp='.$_GET['id']);
 			$affiche=mysql_fetch_array($req);
+			$req1= mysql_query('SELECT pseudo FROM utilisateur where idUti='.$affiche['idUti']);
+			$affiche1=mysql_fetch_array($req1);
+			$req2= mysql_query('SELECT libelleTypGrp FROM type_groupe_sys where idTypGrp='.$affiche['idTypGrp']);
+			$affiche2=mysql_fetch_array($req2);			
 			if($affiche){
 				 echo "<script type='text/javascript'>\n
  		var id= '".$_GET['id']."';\n
@@ -95,7 +102,11 @@ class groupe{
 		<h3>Informations complètes sur le groupe:".$affiche['libelleGrp']."</h3>
 		<form class='form-inline'>  
 		<label>Id: </label><br /><input disabled class='form-control' value='".$affiche['idGrp']."' type='text' name='idGrp' /><br />
-		<label>Libelle: </label><br /><input disabled class='form-control' value='".$affiche['libelleGrp']."' type='text' name='libelleGrp' /><br />
+		<label>Avatar: <a href=''>(Indésirable)</a></label><br>
+		<img  src='http://localhost/plateforme/banque de donnees/groupe avatar/".$affiche['avatarGrp']."' style='display:block; height:100px; width:100px' class='img-responsive img-thumbnail'/></label><br />
+		<label>Libelle: <a href=''>(Indésirable)</a></label><br /><input disabled class='form-control' value='".$affiche['libelleGrp']."' type='text' name='libelleGrp' /><br />
+		<label>Date de Création: </label><br /><input disabled class='form-control' value='".$affiche['dateCreatGrp']."' type='text' name='' /><br />
+		<label>Créateur: </label><br /><input disabled class='form-control' value='".$affiche1['pseudo']."' type='text' name='' /><br />
 		<label>Description: <a href=''>(Indésirable)</a></label><br /><textarea disabled class='form-control textareaFix'  name='descGrp'> ".$affiche['descGrp']."</textarea><br /><br />
 				</form>
 		<button onclick='btnModif(".$affiche['idGrp'].")' class='btn btn-warning'><h5>Modifier</h5></button>

@@ -13,5 +13,5 @@ function deconbd() {
 
 	mysql_close();
 }
-conbd('forum');
+conbd('plateforme');
 ?>
