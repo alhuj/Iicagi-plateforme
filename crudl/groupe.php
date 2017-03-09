@@ -83,8 +83,10 @@ class groupe{
 									';
 
 	}
+
 	public function ajouter(){
 		if(isset($_POST['Submit'])){
+
 				$idUti=$_SESSION['id'];
 				$libelleGrp = mysql_real_escape_string(htmlspecialchars($_POST['libelleGrp']));
 				$descGrp = mysql_real_escape_string(htmlspecialchars($_POST['descGrp']));
@@ -118,14 +120,53 @@ class groupe{
 				}
 
 				else{
-					$req = mysql_query("INSERT INTO groupe (libelleGrp, descGrp, idTypGrp, idUti) VALUES('$libelleGrp','$descGrp',2,'$idUti')") or die (mysql_error());
-					$resultat = mysql_query("SELECT LAST_INSERT_ID() derGrp FROM groupe");
-					$row = mysql_fetch_array($resultat);
-					$idlastGrp = $row['derGrp'];
-					$req2 = mysql_query("INSERT INTO utilisateur_groupe (idGrp,idUti) VALUES($idlastGrp,$idUti)");
-					if($req && $req2){
-				 	echo'<script>alert("Ajout reussi!!!"); grpRedir('.$idlastGrp.')</script>';
+					if($_FILES['avatar']['error']!=4){
+						$dossier = '../../banque de donnees/groupe avatar/';
+						$fichier = basename($_FILES['avatar']['name']);
+						$taille_maxi = 1000000;
+						$taille = filesize($_FILES['avatar']['tmp_name']);
+						$extensions = array('.png', '.gif', '.jpg', '.jpeg');
+						$extension = strrchr($_FILES['avatar']['name'], '.');
+						//Début des vérifications de sécurité...
+						if(!in_array($extension, $extensions)) //Si l'extension n'est pas dans le tableau
+						{
+							 $erreur = 'Vous devez uploader un fichier de type png, gif, jpg, jpeg...';
+						}
+						if($taille>$taille_maxi)
+						{
+							 $erreur = 'Le fichier est trop gros...';
+						}
+						if(!isset($erreur)) //S'il n'y a pas d'erreur, on upload
+						{
+							 if(move_uploaded_file($_FILES['avatar']['tmp_name'], $dossier.$libelleGrp.$extension)) //Si la fonction renvoie TRUE, c'est que ça a fonctionné...
+							 {
+									$avatarGrp=$libelleGrp.$extension;
+									$req=mysql_query("INSERT INTO groupe (avatarGrp, libelleGrp, descGrp, idTypGrp, idUti) VALUES('$avatarGrp', '$libelleGrp','$descGrp',2,'$idUti')") or die(mysql_error());
+									if($req){
+										echo '<script>alert("Groupe créé avec succés");</script>';
+
+									}
+							 }
+							 else //Sinon (la fonction renvoie FALSE).
+							 {
+									echo '<script>alert("Echec de l\'upload !");</script>';
+							 }
+						}
+						else
+						{
+							 echo '<script>alert("'.$erreur.'");</script>';
+						}
+					}else{
+						$req = mysql_query("INSERT INTO groupe (avatarGrp, libelleGrp, descGrp, idTypGrp, idUti) VALUES('defaultGrp.png', '$libelleGrp','$descGrp',2,'$idUti')") or die (mysql_error());
+						$resultat = mysql_query("SELECT LAST_INSERT_ID() derGrp FROM groupe");
+						$row = mysql_fetch_array($resultat);
+						$idlastGrp = $row['derGrp'];
+						$req2 = mysql_query("INSERT INTO utilisateur_groupe (idGrp,idUti) VALUES($idlastGrp,$idUti)");
+						if($req && $req2){
+					 	echo'<script>alert("Ajout reussi!!!"); grpRedir('.$idlastGrp.')</script>';
+						}
 					}
+
 				}
 			}
 	}
@@ -133,7 +174,7 @@ class groupe{
 	public function modifier(){
 			if(isset($_POST['submit'])){
 
-				if(isset($_FILES['avatar'])){
+				if($_FILES['avatar']['error']!=4){
 						$idGrp = $_POST['idGrp'];
 						$libelleGrp = mysql_real_escape_string(htmlspecialchars($_POST['libelleGrp']));
 						$descGrp = mysql_real_escape_string(htmlspecialchars($_POST['descGrp']));
@@ -142,7 +183,7 @@ class groupe{
 						$taille_maxi = 1000000;
 						$taille = filesize($_FILES['avatar']['tmp_name']);
 						$extensions = array('.png', '.gif', '.jpg', '.jpeg');
-						$extension = strrchr($_FILES['avatar']['name'], '.'); 
+						$extension = strrchr($_FILES['avatar']['name'], '.');
 						//Début des vérifications de sécurité...
 						if(!in_array($extension, $extensions)) //Si l'extension n'est pas dans le tableau
 						{
@@ -160,7 +201,7 @@ class groupe{
 								  $req=mysql_query("UPDATE groupe SET avatarGrp = '$avatarGrp', libelleGrp = '$libelleGrp', descGrp = '$descGrp' WHERE idGrp = ".$idGrp) or die(mysql_error());
 								  if($req){
 									  echo '<script>alert("Upload effectué avec succès !");grpRedir('.$idGrp.');</script>';
-									 
+
 								  }
 							 }
 							 else //Sinon (la fonction renvoie FALSE).
@@ -172,7 +213,7 @@ class groupe{
 						{
 							 echo '<script>alert("'.$erreur.'");</script>';
 						}
-				}elseif(!isset($_FILES['avatar'])) {
+				}else{
 					$idGrp = $_POST['idGrp'];
 					$libelleGrp = mysql_real_escape_string(htmlspecialchars($_POST['libelleGrp']));
 					$descGrp = mysql_real_escape_string(htmlspecialchars($_POST['descGrp']));
@@ -187,7 +228,7 @@ class groupe{
 						echo("<script>alert('La modification à échouée.')</script>") ;
 
 					}
-				}			
+				}
 			}
 	}
 	public function supprimer(){
@@ -221,12 +262,14 @@ class groupe{
 							<h2>".$affiche['libelleGrp']."</h2>
 							<p><b><i>".$affiche['dateCreatGrp']."</i></b></p>
 							<h3>".$affiche['descGrp']."</h3>
-						</div>";
-					if($_SESSION['id']==$affiche['idUti']){
-						echo"<br>
+						</div><br>
 							<div class='list-group'>
 								<button class='btn btn-lg btn-inverse' onclick='newSujetGrp(".$idGrp.")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Poser Question</button>
 								<button class='btn btn-lg btn-inverse' onclick='newPartGrp(".$idGrp.")'><span class='glyphicon glyphicon-share' aria-hidden='true'></span> Partager</button>
+								";
+
+								if($_SESSION['id']==$affiche['idUti']){
+									echo"
 								<button class='btn btn-lg btn-inverse' onclick='btnModifGr(".$idGrp.")'><span class='glyphicon glyphicon-edit' aria-hidden='true'></span> Modifier</button>
 								<button class='btn btn-lg btn-inverse' onclick='btnSuppGr(".$idGrp.")'><span class='glyphicon glyphicon-trash' aria-hidden='true'></span> Supprimer</button>
 							</div>";
@@ -322,7 +365,7 @@ while($affich = mysql_fetch_array($req1)){
 	}
 
 public function partager(){
-	if(isset($_POST['partager'])){				
+	if(isset($_POST['partager'])){
 				$lienArt='';
 				$libelleArt = $_POST['libelleArt'];
 				$descArt = $_POST['descArt'];
@@ -331,19 +374,19 @@ public function partager(){
 				$i=0;
 				$idTypArt = 7;
 				//upload article
-						$extension = strrchr($_FILES['article']['name'], '.'); 
+						$extension = strrchr($_FILES['article']['name'], '.');
 						$dossier = '../../banque de donnees/article/';
 						$fichier = basename($_FILES['article']['name']);
-						$chaine= date('YmdHis');						
+						$chaine= date('YmdHis');
 						$extensions = array('.doc', '.docx', '.jpg', '.jpeg', '.png', '.pdf', '.mp4', 'mp3');
-						$extension = strrchr($_FILES['article']['name'], '.'); 
+						$extension = strrchr($_FILES['article']['name'], '.');
 						// Début des vérifications de sécurité...
 						if(!in_array($extension, $extensions)) //Si l'extension n'est pas dans le tableau
 						{
 							 $erreur = 'Vous devez uploader un fichier de type doc, docx,pdf, png, jpg, jpeg...';
 						}
 						if($i==0)$erreur = 'Désolé, le type de fichier sélectionner ne pas être ajout dans la bibliothèque...';
-						 
+
 						//Début des vérifications de sécurité...
 								$taille_maxi = 500000000;
 								$taille = filesize($_FILES['article']['tmp_name']);
@@ -355,7 +398,7 @@ public function partager(){
 								{
 									 if(move_uploaded_file($_FILES['article']['tmp_name'], $dossier.$_SESSION['pseudo'].$chaine.$extension)) //Si la fonction renvoie TRUE, c'est que ça a fonctionné...
 									 {
-										  
+
 										$lienArt =$_SESSION['pseudo'].$chaine.$extension;
 										$resultat = mysql_query("INSERT INTO article (libelleArt, lienArt, descArt, idTypArt, idUti, idGrp) VALUES('$libelleArt', '$lienArt', '$descArt', '$idTypArt', '$idUti', '$idGrp')") or die(mysql_error());
 				if($resultat){

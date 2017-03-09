@@ -1,4 +1,4 @@
-<?php 
+<?php
 include('../../config.php');
 $titre="Ajout Groupe";
 include('../includes/debut.php');
@@ -6,16 +6,24 @@ include('../includes/menuGroupe.php');
 include('../../crudl/groupe.php');
 
 echo "
-<form role='form1' name='form1' action='ajouterGr.php' method='post'>
+<form role='form1' name='form1' action='ajouterGr.php'  enctype='multipart/form-data' method='post'>
 	<div class='row'>
    	<div class='col-md-8'>
     	<div class='form-group'>
-        	<label for='libelleGrp'>Nom du grupe</label>
+        	<label for='libelleGrp'>Nom du groupe</label>
        		<input type='text' name='libelleGrp' class='form-control' placeholder='Nom groupe'>
     	</div>
+			</div>
+			</div>
+	<div class='row'>
+		<div class='col-md-8'>
+			<div class='form-group'>
+					<label for='libelleGrp'>Ajouter un avatar</label>
+					<input  type='file' name='avatar'/>
+			</div>
 	</div>
 	</div>
-    <div class='row'>	
+    <div class='row'>
 		<div class='col-md-8'>
         	<div class='form-group'>
 				<label for='descGrp'>Description</label>

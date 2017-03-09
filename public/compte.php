@@ -176,37 +176,40 @@ $aff4=mysql_fetch_array($req4);
     </DIV>
   </div>
 
-  <div id="avatar" class="tab-pane fade">
+  <div id="avatar" class="tab-pane fade row">
     <h3>Changer de photo de profile:</h3>
-    <p>
-          <span>
-              Avatar
-          </span>
-          <span>
-              <img src="../banque de donnees/utilisateur avatar/<?php echo $aff['avatar'] ?>" style="display:block; height:100px; width:100px" class="img-responsive img-thumbnail" />
+    <div class="">
+      <div class="col-md-6">
+        <img src="../banque de donnees/utilisateur avatar/<?php echo $aff['avatar'] ?>" style="display:block; height:500px; width:420px" class="img-responsive img-thumbnail" />
+      </div>
+          <div class="col-md-6 form-group ">
               <form action="compte.php" method="post"  enctype="multipart/form-data">
-                Changer d'avatar: <input type="file" name="avatar"/>  <input type="submit" name="uplAvt" value="Valider"/>
+                Changer d'avatar: <input class="form-control" type="file" name="avatar"/> <br>
+                <input class="btn btn-lg btn-inverse" type="submit" name="uplAvt" value="Valider"/>
+
+                <input class="btn btn-lg btn-info" type="submit" name="uplAvtDef" value="Par défaut"/>
               </form>
-          </span>
-        </p>
+          </div>
+        </div>
   </div>
   <div id="pseudo" class="tab-pane fade">
-    <h3>Changer de pseudonyme:</h3>
+    <h3>Changer de pseudonyme:</h3><br>
     <div>
-      <span>
-          Pseudo:
-      </span>
-      <span>
+      <h4>
+          Pseudo actuel: <?php echo $aff['pseudo'] ?>
+      </h4><br>
+      <div class="form-group col-md-3">
       <form action="compte.php" method="post"  enctype="multipart/form-data">
-          <input type="text" name="pseudo" value="<?php echo $aff['pseudo'] ?>" /><input type="submit" name="changePseudo" value="Valider"/>
+          <input placeholder="Nouveau pseudo" class="form-control" type="text" name="pseudo" value="" /><br>
+          <input class="btn btn-lg btn-inverse" type="submit" name="changePseudo" value="Valider"/>
          </form>
-      </span>
+      </div>
     </div>
   </div>
   <div id="password" class="tab-pane fade">
     <h3>Changer de mot de passe</h3>
     <p>
-         <div>
+         <div class="form-group col-md-4">
           <form action="compte.php" method="post"  enctype="multipart/form-data">
                 <span>
                     <input placeholder='Ancien mot de passe' class="form-control" type="password" name="nvpass"/>
@@ -215,8 +218,8 @@ $aff4=mysql_fetch_array($req4);
                     <input placeholder='Nouveau mot de passe' class="form-control" type="password" name="nvpass"/>
                 </span><br />
                 <span>
-                    <input placeholder='Répétez le nouveau mot de passe' class="form-group" type="password" name="renvpass"/>
-                </span><br /><input type="submit" name="chgmp" value="Valider"/>
+                    <input placeholder='Répétez le nouveau mot de passe' class="form-control" type="password" name="renvpass"/>
+                </span><br /><input class="btn btn-lg btn-inverse" type="submit" name="chgmp" value="Valider"/>
           </form>
       </div>
     </p>
@@ -236,7 +239,8 @@ $aff4=mysql_fetch_array($req4);
             }else echo 'Aucun groupe';
           ?>
     </p>
-  </div>  <div id="forum" class="tab-pane fade">
+  </div>
+  <div id="forum" class="tab-pane fade">
     <h3>Mes sujets</h3>
     <p>
         <?php
@@ -290,6 +294,13 @@ include'includes/fin.php';
     {
        echo $erreur;
     }
+  }elseif(isset($_POST['uplAvtDef'])){
+    $req=mysql_query('update utilisateur set avatar="defaultUser.jpg" where idUti='.$id1) or die(mysql_error());
+    if($req){
+      echo 'Upload effectué avec succès !';
+      $_SESSION['avatar']=$avatar;
+    }
+
   }
 //changer de mot de passe***************************************
   if(isset($_POST['chgmp'])){
