@@ -5,7 +5,7 @@ include('../includes/debut.php');
 include('../../crudl/question.php');
 include('../includes/menuForum.php');
 echo "
-<form role='form1' name='form1' action='ajouter_sujet.php?id=".$id1."' method='post'>
+<form role='form1' name='form1' action='ajouter_sujet.php' method='post'>
 	<input type='hidden' name='idUti' value='".$id1."'/>
 	<div class='row'>
    	<div class='col-md-8'>

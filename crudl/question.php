@@ -1,7 +1,7 @@
 <?php
-//*****************	
+//*****************
 include 'fonction.php';
-		
+
 class question{
 	public function liste(){
 		echo "<table class='table table-striped table-expansed table-radius'>
@@ -17,14 +17,14 @@ class question{
         </tr>
     </thead>
 	 <tbody>
-        
+
             ";
 
 $resutat = mysql_query("SELECT * FROM question WHERE idGrp=1") or die(mysql_error());
 $nbrTotalQues = mysql_num_rows($resutat);
 $nbrQuesParPage=10;
 $pagestr='<a href="index.php?page=';
-			
+
 
 paginationn($nbrTotalQues, $nbrQuesParPage, $pagestr);
 
@@ -79,10 +79,9 @@ while($affich = mysql_fetch_array($req)){
 
 public function ajouter(){
 
-if(isset($_POST['Submit'])){	
+if(isset($_POST['Submit'])){
 // get data that sent from form
 $idUti=$_POST['idUti'];
-$idGrp=$_GET['id'];
 $sujet = mysql_real_escape_string(htmlspecialchars($_POST['sujet']));
 $det = mysql_real_escape_string(htmlspecialchars($_POST['detail']));
 $detail = nl2br($det);
@@ -91,17 +90,17 @@ if (empty($_POST['sujet']) && empty($_POST['detail']))
     {
     ?>
         <script>
-            Javascript:alert('ECHEC....... Voulez-vous posez votre question s\'il vous plait et nous le detailler? Merci...')			
+            Javascript:alert('ECHEC....... Voulez-vous posez votre question s\'il vous plait et nous le detailler? Merci...')
         </script>
     <?php
 	}
-	
+
 elseif (empty($_POST['sujet']) && !empty($_POST['detail']))
     {
     ?>
         <script>
             Javascript:alert('ECHEC....... Veuillez fomuler votre sujet en quelques mots s il vous plait.')
-						
+
         </script>
     <?php
     }
@@ -111,13 +110,13 @@ elseif (!empty($_POST['sujet']) && empty($_POST['detail']))
     ?>
         <script>
             Javascript:alert('ECHEC....... Merci de nous expliquez clairement votre probleme.')
-						
+
         </script>
     <?php
 	}
 
 else{
-$sql="INSERT INTO question(sujet, detailQu, idUti, idGrp) VALUES('$sujet','$detail','$idUti','$idGrp')";
+$sql="INSERT INTO question(sujet, detailQu, idUti, idGrp) VALUES('$sujet','$detail','$idUti', 1)";
 $result=mysql_query($sql) or die(mysql_error());
 mysql_close();
 echo "
@@ -145,32 +144,32 @@ public function modifier(){
 			else
 			{
 				echo("<script>alert('La modification à échouée.')</script>") ;
-		
+
 			}
-				
-	
+
+
 	}
 	}
 
 
 public function supprimer(){
-	
+
 	if(isset($_GET['idQu'])){
 						$req = mysql_query("DELETE FROM `question` WHERE `idQu` = ".$_GET['idQu']) or die(mysql_error());
-			
+
 					if($req){
 						echo("<script>alert('La suppression à été effectuée avec succes.'); window.history.go(-1);</script>") ;
-								
+
 							}else	echo("<script>alert('La Suppression a échouee.');</script>") ;
-				
+
 							}
- 		
+
 }
 
 
 
 public function affiche(){
-	$idQu=$_GET['idQu'];		
+	$idQu=$_GET['idQu'];
 $sql="SELECT pseudo, avatar, sujet, detailQu, heureQu, q.idUti AS createur, resolu
 		FROM utilisateur AS u, question AS q
 		WHERE u.idUti=q.idUti && q.idQu='$idQu'";
@@ -192,9 +191,9 @@ echo "
 }
 echo"
 <div class='voireSuj jumbotron'>";
-  
+
  if($_SESSION['id']==$rows['createur'] && $rows['resolu']==0){
-  
+
   echo"<div class='dropdown' style='float:right'>
   		<button class='btn btn-success dropdown-toggle' type='button' data-toggle='dropdown'>
   			<span class='caret'></span>
@@ -215,14 +214,14 @@ echo"
     	</a>
 	</div>
 	<div class='media-body'>
-	
+
 		<h2>".$rows['sujet']."</h2>
-    
+
 		<p class='text-capitalize' ><font size='2'>Poser par : <strong>".$rows['pseudo']."</strong> --- Le ".$rows['heureQu']."</font></p>
-  	
+
 		<hr>
 
-		<br> 
+		<br>
   		<p><font size='4'>".nl2br($rows['detailQu'])."</font></p>
   		<hr>
   		<br>
@@ -230,9 +229,9 @@ echo"
 </div>
 </div>
 <BR>";
-	
+
 	}
-	
+
 
 }//fin classe questio
 ?>

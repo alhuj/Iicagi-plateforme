@@ -228,15 +228,83 @@ $aff4=mysql_fetch_array($req4);
     <h3>Mes groupes</h3>
     <p>
           <?php
-              $reqGrp1=mysql_query('select idGrp from utilisateur_groupe where idUti='.$id1);
-            $rows=mysql_num_rows($reqGrp1);
-            if($rows){
-              while($affGrp1=mysql_fetch_array($reqGrp1)){
-              $reqGrp=mysql_query('select libelleGrp from groupe where idGrp='.$affGrp1['idGrp']) or die(mysql_error());
-              $affGrp=mysql_fetch_array($reqGrp);
-              echo $affGrp['libelleGrp'];
-              }
-            }else echo 'Aucun groupe';
+          echo "<table class='table table-hover '>
+
+          <thead>
+              <tr>
+      			<th>Avatar</th>
+                  <th>Libellé</th>
+                  <th style='width:45%'>Description</th>
+      			<th>Date Création</th>
+              </tr>
+          </thead>
+
+      	 <tbody>
+
+                  ";
+      				$idUti=$_SESSION['id'];
+      				$resutat = mysql_query("SELECT * FROM
+      										groupe g, utilisateur_groupe u
+      										WHERE g.idGrp=u.idGrp AND u.idUti=$idUti") or die(mysql_error());
+      				if(mysql_num_rows($resutat)== 0){
+       					  echo "<tr><th>Vous n'avez créer ou ne participez à aucun groupe....</th></tr>";
+      					}else{
+      				$nbrTotalQues = mysql_num_rows($resutat);
+      				$nbrQuesParPage=5;
+      				$pagestr='<a href="index.php?page=';
+
+
+      				paginationn($nbrTotalQues, $nbrQuesParPage, $pagestr);
+
+      				$limit=$GLOBALS['limit'];
+      				$pagination=$GLOBALS['pagination'];
+
+
+
+      					$req = mysql_query("SELECT g.idGrp, libelleGrp, descGrp, dateCreatGrp, avatarGrp, u.idUti, t.idUti createur, pseudo
+      										FROM utilisateur_groupe u, groupe g, utilisateur t
+      										WHERE g.idGrp=u.idGrp AND t.idUti=g.idUti AND u.idUti=$idUti
+      										GROUP BY g.idGrp
+      										ORDER BY g.idGrp DESC $limit") or die(mysql_error());
+
+      					while($affich = mysql_fetch_array($req)){
+      						echo	"<tr>
+      							<th class='text-capitalize'>
+      								<img src='http://localhost/plateforme/banque de donnees/groupe avatar/".$affich['avatarGrp']."' style='display:block; height:60px; width:60px;' class='img-responsive profile-image img-rounded'' />
+      							</th>
+      							<th onclick='ouvrirEnrg(".$affich['idGrp'].")'>".$affich['libelleGrp']."</th>
+      							<th onclick='ouvrirEnrg(".$affich['idGrp'].")'>".$affich['descGrp']."</th>
+      							<th onclick='ouvrirEnrg(".$affich['idGrp'].")'>".$affich['dateCreatGrp']."</th>
+                    ";
+
+      							if($_SESSION['id']==$affich['createur']){
+
+      							echo"<th>
+      							<div class='dropdown' style='float:right'>
+        								<button class='btn dropdown-toggle' type='button' data-toggle='dropdown'>
+        									<span class='caret'></span>
+      								</button>
+        								<ul class='dropdown-menu'>
+          								<li><a href='modifierGr.php?id=".$affich['idGrp']."'>Modifier</a></li>
+      									<li class='divider'></li>
+          								<li><a href='supprimerGr.php?id=".$affich['idGrp']."'>Supprimer</a></li>
+        								</ul>
+      							</div>
+      							</th>
+      							</tr>";
+      							}
+
+      					}
+      					}
+      								echo ' </tbody>
+      										</table>
+      										<nav aria-label="Page navigation">
+      											<ul class="pager">
+      												<li>'.$pagination.'</li>
+      											</ul>
+      										</nav>
+      									';
+
           ?>
     </p>
   </div>
