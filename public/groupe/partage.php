@@ -1,4 +1,4 @@
-<?php 
+<?php
 include('../../config.php');
 $titre="Partage de document";
 include('../includes/debut.php');
@@ -11,7 +11,7 @@ if(isset($_GET['id'])){
 $idGrp=$_GET['id'];
 
 echo "
-<form role='form1' name='form1' action='modifierGr.php' method='post' enctype='multipart/form-data'>
+<form role='form1' name='form1' action='partage.php' method='post' enctype='multipart/form-data'>
 	<input type='hidden' name='idGrp' value='".$idGrp."'/>
 	<div class='row'>
    	<div class='col-md-8'>
@@ -21,7 +21,7 @@ echo "
     	</div>
 	</div>
 	</div>
-    <div class='row'>	
+    <div class='row'>
 		<div class='col-md-8'>
         	<div class='form-group'>
 				<label for='avatar'>Document</label>
@@ -29,7 +29,7 @@ echo "
 			</div>
         </div>
 	</div>
-    <div class='row'>	
+    <div class='row'>
 		<div class='col-md-8'>
         	<div class='form-group'>
 				<label for='descGrp'>Description</label>
@@ -37,7 +37,7 @@ echo "
 			</div>
         </div>
 	</div>
-	<input class='btn btn-lg btn-primary' type='submit' name='submit' value='Partager' />
+	<input class='btn btn-lg btn-primary' type='submit' name='partager' value='Partager' />
 </form>
 ";
 }

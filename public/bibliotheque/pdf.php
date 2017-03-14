@@ -22,7 +22,7 @@ $art = new article();
 		      <div class="caption">
 		        <h3>'.$aff1['libelleArt'].'</h3>
 						<span><strong>J\'aime /\ Je n\'aime pas</strong></span>
-		        <p>'.$aff1['descArt'].'<br><i>Mis en ligne par </i><b>'.$aff2['pseudo'].'</b><i> le </i><b>'.$aff1['datePub'].'</b></p>
+		        <p class="well">'.$aff1['descArt'].'<br><i>Mis en ligne par </i><b>'.$aff2['pseudo'].'</b><i> le </i><b>'.$aff1['datePub'].'</b></p>
 		        <p><a href="affiche.php?'.$aff1['idArt'].'" class="btn btn-primary" role="button">Voir l\'article</a> <a href="http://localhost/plateforme/banque de donnees/article/'.$aff1['lienArt'].'" class="btn btn-default" role="button">Télécharger</a></p>
 		      </div>
 		    </div>

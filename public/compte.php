@@ -19,9 +19,6 @@ $aff4=mysql_fetch_array($req4);
   <li><a data-toggle="tab" href="#avatar">Changer d'avatar</a></li>
   <li><a data-toggle="tab" href="#pseudo">Changer de pseudo</a></li>
   <li><a data-toggle="tab" href="#password">Sécurité</a></li>
-  <li><a data-toggle="tab" href="#groupes">Mes groupes</a></li>
-  <li><a data-toggle="tab" href="#forum">Mes discussions</a></li>
-  <li><a data-toggle="tab" href="#article">Mes articles</a></li>
 </ul>
 
 <div class="tab-content">
@@ -212,7 +209,7 @@ $aff4=mysql_fetch_array($req4);
          <div class="form-group col-md-4">
           <form action="compte.php" method="post"  enctype="multipart/form-data">
                 <span>
-                    <input placeholder='Ancien mot de passe' class="form-control" type="password" name="nvpass"/>
+                    <input placeholder='Ancien mot de passe' class="form-control" type="password" name="pass"/>
                 </span><br />
                 <span>
                     <input placeholder='Nouveau mot de passe' class="form-control" type="password" name="nvpass"/>
@@ -224,105 +221,7 @@ $aff4=mysql_fetch_array($req4);
       </div>
     </p>
   </div>
-  <div id="groupes" class="tab-pane fade">
-    <h3>Mes groupes</h3>
-    <p>
-          <?php
-          echo "<table class='table table-hover '>
 
-          <thead>
-              <tr>
-      			<th>Avatar</th>
-                  <th>Libellé</th>
-                  <th style='width:45%'>Description</th>
-      			<th>Date Création</th>
-              </tr>
-          </thead>
-
-      	 <tbody>
-
-                  ";
-      				$idUti=$_SESSION['id'];
-      				$resutat = mysql_query("SELECT * FROM
-      										groupe g, utilisateur_groupe u
-      										WHERE g.idGrp=u.idGrp AND u.idUti=$idUti") or die(mysql_error());
-      				if(mysql_num_rows($resutat)== 0){
-       					  echo "<tr><th>Vous n'avez créer ou ne participez à aucun groupe....</th></tr>";
-      					}else{
-      				$nbrTotalQues = mysql_num_rows($resutat);
-      				$nbrQuesParPage=5;
-      				$pagestr='<a href="index.php?page=';
-
-
-      				paginationn($nbrTotalQues, $nbrQuesParPage, $pagestr);
-
-      				$limit=$GLOBALS['limit'];
-      				$pagination=$GLOBALS['pagination'];
-
-
-
-      					$req = mysql_query("SELECT g.idGrp, libelleGrp, descGrp, dateCreatGrp, avatarGrp, u.idUti, t.idUti createur, pseudo
-      										FROM utilisateur_groupe u, groupe g, utilisateur t
-      										WHERE g.idGrp=u.idGrp AND t.idUti=g.idUti AND u.idUti=$idUti
-      										GROUP BY g.idGrp
-      										ORDER BY g.idGrp DESC $limit") or die(mysql_error());
-
-      					while($affich = mysql_fetch_array($req)){
-      						echo	"<tr>
-      							<th class='text-capitalize'>
-      								<img src='http://localhost/plateforme/banque de donnees/groupe avatar/".$affich['avatarGrp']."' style='display:block; height:60px; width:60px;' class='img-responsive profile-image img-rounded'' />
-      							</th>
-      							<th onclick='ouvrirEnrg(".$affich['idGrp'].")'>".$affich['libelleGrp']."</th>
-      							<th onclick='ouvrirEnrg(".$affich['idGrp'].")'>".$affich['descGrp']."</th>
-      							<th onclick='ouvrirEnrg(".$affich['idGrp'].")'>".$affich['dateCreatGrp']."</th>
-                    ";
-
-      							if($_SESSION['id']==$affich['createur']){
-
-      							echo"<th>
-      							<div class='dropdown' style='float:right'>
-        								<button class='btn dropdown-toggle' type='button' data-toggle='dropdown'>
-        									<span class='caret'></span>
-      								</button>
-        								<ul class='dropdown-menu'>
-          								<li><a href='modifierGr.php?id=".$affich['idGrp']."'>Modifier</a></li>
-      									<li class='divider'></li>
-          								<li><a href='supprimerGr.php?id=".$affich['idGrp']."'>Supprimer</a></li>
-        								</ul>
-      							</div>
-      							</th>
-      							</tr>";
-      							}
-
-      					}
-      					}
-      								echo ' </tbody>
-      										</table>
-      										<nav aria-label="Page navigation">
-      											<ul class="pager">
-      												<li>'.$pagination.'</li>
-      											</ul>
-      										</nav>
-      									';
-
-          ?>
-    </p>
-  </div>
-  <div id="forum" class="tab-pane fade">
-    <h3>Mes sujets</h3>
-    <p>
-        <?php
-              $reqQu=mysql_query('select * from question where idUti='.$id1) or die(mysql_error());
-            $rows=mysql_num_rows($reqQu);
-            if($rows){
-              while($affQu=mysql_fetch_array($reqQu)){
-              echo $affQu['sujet'].' / ';
-              }
-            } else echo 'Vous avez posté aucun sujet de discussion.';
-          ?>
-    </p>
-  </div>
-</div>
 <?php
 include'includes/fin.php';
 //Upload avatar***************************************
@@ -349,36 +248,40 @@ include'includes/fin.php';
           $avatar=$pseudo.$extension;
           $req=mysql_query('update utilisateur set avatar="'.$avatar.'" where idUti='.$id1) or die(mysql_error());
           if($req){
-            echo 'Upload effectué avec succès !';
+            echo '<script>alert("Avatar changé avec succès !';
             $_SESSION['avatar']=$avatar;
           }
        }
        else //Sinon (la fonction renvoie FALSE).
        {
-          echo 'Echec de l\'upload !';
+          echo '<script>alert("Echec de l\'upload de l\'image!");</script>';
        }
     }
     else
     {
-       echo $erreur;
+       echo '<script>alert("'.$erreur.'");</script>';
     }
   }elseif(isset($_POST['uplAvtDef'])){
     $req=mysql_query('update utilisateur set avatar="defaultUser.jpg" where idUti='.$id1) or die(mysql_error());
     if($req){
       echo 'Upload effectué avec succès !';
-      $_SESSION['avatar']=$avatar;
+      $_SESSION['avatar']="defaultUser.jpg";
     }
 
   }
 //changer de mot de passe***************************************
   if(isset($_POST['chgmp'])){
-        if($_POST['renvpass']== $_POST['nvpass']){
-          $nvpass=$_POST['nvpass'];
-          $req=mysql_query('update utilisateur set pass="'.$nvpass.'" where idUti='.$id1) or die(mysql_error());
-          if($req){
-            echo 'Mot de passe changé avec succès !';
-          }
-        }else echo'Vous n\'avez pas resaisi le meme mot de passe...';
+    if($_POST['renvpass']== $_POST['nvpass']){
+      if($_POST['pass'] == $_POST['nvpass']){
+            echo"<script>alert('Désolé, vous devriez saisir un mot de passe différent de votre mot de passe actuel.');</script>";
+      }else{
+        $nvpass=$_POST['nvpass'];
+        $req=mysql_query('update utilisateur set pass="'.$nvpass.'" where idUti='.$id1) or die(mysql_error());
+        if($req){
+          echo '<script>alert("Mot de passe changé avec succès !");</script>';
+        }
+      }
+    }else echo'<script>alert("Vous n\'avez pas resaisi le meme mot de passe...");</script>';
 
   }
 //changer de pseudo***************************************
@@ -387,8 +290,9 @@ include'includes/fin.php';
           $pseudo=$_POST['pseudo'];
           $req=mysql_query('update utilisateur set pseudo="'.$pseudo.'" where idUti='.$id1) or die(mysql_error());
           if($req){
-            echo 'Pseudo changé avec succès !';
+            echo '<script>alert("Pseudo changé avec succès !");</script>';
             $_SESSION['pseudo']=$pseudo;
+            echo '<script>document.Reload();</script>';
           }
         }
 

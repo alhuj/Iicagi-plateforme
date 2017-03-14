@@ -1,4 +1,4 @@
-<?php 
+<?php
 include ('fonction.php');
 include ('sendMails.php');
 
@@ -25,8 +25,8 @@ class utilisateur{
         </tr>
     </thead>
 	 <tbody>
-        
-            ";		
+
+            ";
 					$req = mysql_query('SELECT * FROM utilisateur');
 					while($affich = mysql_fetch_array($req)){
 						$r1=mysql_query('select libelleType from type_utilisateur_sys where idType='.$affich['idType']);
@@ -42,10 +42,10 @@ class utilisateur{
 							'</th><th onclick="ouvrirEnrg('.$affich['idUti'].')">'.$affich['lieuNaiss'].
 							'</th><th onclick="ouvrirEnrg('.$affich['idUti'].')">'.$affich['pseudo'].
 							'</th><th class="btn-info" onclick="ouvrirEnrg('.$affich['idUti'].')">'.$aff1['libelleType'].
-							'</th><th class="btn-success" onclick="ouvrirEnrg('.$affich['idUti'].')">'.$aff2['libellePrivi'].'							
+							'</th><th class="btn-success" onclick="ouvrirEnrg('.$affich['idUti'].')">'.$aff2['libellePrivi'].'
 							</th>
 							<th>';
-							
+
 							if($affich['bloquer']==0){
 								echo'<button onclick="btnBloq('.$affich["idUti"].')" class="btn btn-primary">Bloquer</button>';
 							}else echo'<button onclick="btnDebloq('.$affich["idUti"].')" class="btn btn-primary">Débloquer</button>';
@@ -79,7 +79,7 @@ class utilisateur{
 								echo'<button onclick="btnBloq('.$affiche["idUti"].')" class="btn btn-primary">Bloquer</button>';
 							}else echo'<button onclick="btnDebloq('.$affiche["idUti"].')" class="btn btn-primary">Débloquer</button>';
 echo"
-		<form class='form-inline'>  
+		<form class='form-inline'>
 		<label>Id: </label><br /><input disabled class='form-control' value='".$affiche['idUti']."' type='text' name='idUti' /><br />
 		<label>Dernière connexion: </label><br /><input disabled class='form-control' value='".$affiche['dateDerConn']."' type='text' name='dateDerConn' /><br />
 		<label>Avatar: <a href='indesirable avatar.php?id=".$affiche['idUti']."'>(Indésirable)</a></label><br /><img src='http://localhost/plateforme/banque de donnees/utilisateur avatar/".$affiche['avatar']."' style='display:block; height:100px; width:100px' class='img-responsive img-thumbnail' /><br />
@@ -125,8 +125,35 @@ echo"
 					$req=mysql_query("INSERT INTO utilisateur (avatar, pseudo, pass, nom, prenom, dateNaiss, lieuNaiss, adresse, telephone, email, idFil, idNiv,idType,idPrivi) VALUES( 'defaultUser.jpg','$pseudo', '$pass', '$nom', '$prenom', '$dateNaiss', '$lieuNaiss', '$adresse', '$telephone', '$email', '$idFil', '$idNiv', '$idType', '$idPrivi')") or die(mysql_error());
 					if($req){
 						echo'<script>alert("Utilisateur ajouté avec succés.");indexRedir();</script>';
-					}
-				}
+						require('http://localhost/plateforme/phpmailer/PHPMailerAutoload.php');
+						$mail = new PHPMailer();
+						$mail->IsSMTP();
+						$mail->SMTPDebug = 0;
+						$mail->SMTPAuth = TRUE;
+						$mail->SMTPSecure = "tls";
+						$mail->Port     = 587;
+						$mail->Username = "myalhusain@gmail.com";
+						$mail->Password = "ipJallow";
+						$mail->Host     = "smtp.gmail.com";
+						$mail->Mailer   = "smtp";
+						$mail->SetFrom("myalhusain@gmail.com", "Admin ICAGI plateforme: version Alpha 1");
+						$mail->AddReplyTo("myalhusain@gmail.com");
+						$mail->AddAddress("petitho91@gmail.com");
+						$mail->Subject = "Bonjour, vous venez d'être ajouter comme membre de la plateforme d'entraide d'ICAGI.
+						                  - Pseudo:".$pseudo."
+															- Mot de passe:".$pass."
+															";
+						$mail->WordWrap   = 80;
+						$content = "<b>Merci et cordialement!</b>"; $mail->MsgHTML($content);
+						$mail->IsHTML(true);
+						if(!$mail->Send()){
+						echo "Problem sending email.";
+						 echo 'Mailer Error: ' . $mail->ErrorInfo;
+						}
+						else
+						echo "email sent.";
+											}
+										}
 			}
 //*************************************************************************
 //*************************************************************************
@@ -147,7 +174,7 @@ echo"
 			$idType=$_POST['idType'];
 			$req=mysql_query("UPDATE utilisateur SET nom='$nom', prenom='$prenom', dateNaiss='$dateNaiss', lieuNaiss='$lieuNaiss', adresse='$adresse', telephone='$telephone', email='$email', idFil='$idFil', idNiv='$idNiv', idPrivi='$idPrivi', idType='$idType' WHERE idUti=".$id) or die(mysql_error());
 				if($req){
-						echo '<script>alert("Utilisateur modifie avec succes");indexRedir();</script>'; 
+						echo '<script>alert("Utilisateur modifie avec succes");indexRedir();</script>';
 						 }else echo'<script>alert("La modification a echouee.");</script>';
 		}
 
@@ -184,7 +211,7 @@ echo"
 		$req=mysql_query('select * from utilisateur where bloquer=1');
 		$rows=mysql_num_rows($req);
 		if($rows!=0){
-							
+
 								echo "
 				<table class='table table-hover table-expansed table-radius'>
 				<caption class='text-center'>Liste des utilisateurs bloqués</caption>
@@ -200,7 +227,7 @@ echo"
 						<th>Bloquer</th>
 					</tr>
 				</thead>
-				 <tbody> ";	
+				 <tbody> ";
 								while($affich=mysql_fetch_array($req)){
 										  echo	'<tr>
 					  		<th onclick="ouvrirEnrg('.$affich['idUti'].')">'.$affich['idUti'].'</th>
@@ -214,38 +241,38 @@ echo"
 							<th><button onclick="btnDebloq('.$affich["idUti"].')" class="btn btn-primary">Débloquer</button>
 							</th>
 							</tr>
-							';	
+							';
 				}
 				echo"</tbody>
 							</table>";
-				
+
 				}else echo"<strong>Aucun utilisateur bloqué.</strong>";
 	}
 //---------------------------------------------------------------
 public function indPseudo(){
 	if(isset($_GET['id'])){
 		$req=mysql_query('select * from utilisateur where idUti='.$_GET['id']) or die(mysql_error());
-		$aff=mysql_fetch_array($req);	
+		$aff=mysql_fetch_array($req);
 		$nom=$aff['nom'];
 		$email=$aff['email'];
 		$pseudo=$aff['pseudo'];
 		$pseudo=genPseudo($nom);
 		$req=mysql_query('update utilisateur set pseudo="'.$pseudo.'" where idUti='.$_GET['id']) or die(mysql_error());
 		if($req){
-			
+
 			mailPseudoIndesirable($pseudo,$email);
 			echo'<script>alert("Pseudo par default rétabli et mail d\'avertissement envoyé!!!");indexRedir();</script>';
-			} 
+			}
 		}
 }
 
 public function indDesc(){
 	if(isset($_GET['id'])){
 		$req=mysql_query('select * from utilisateur where idUti='.$_GET['id']) or die(mysql_error());
-		$aff=mysql_fetch_array($req);	
+		$aff=mysql_fetch_array($req);
 		$email=$aff['email'];
 		$pseudo=$aff['pseudo'];
-		$req=mysql_query('update utilisateur set description="" where id='.$_GET['id']);	
+		$req=mysql_query('update utilisateur set description="" where id='.$_GET['id']);
 		if($req){
 			mailDescIndesirable($email,$pseudo);
 			echo'<script>alert("Description par default rétabli et mail d\'avertissement envoyé!!!");indexRedir();</script>';
@@ -255,10 +282,10 @@ public function indDesc(){
 public function indAvatar(){
 	if(isset($_GET['id'])){
 		$req=mysql_query('select * from utilisateur where idUti='.$_GET['id']) or die(mysql_error());
-		$aff=mysql_fetch_array($req);	
+		$aff=mysql_fetch_array($req);
 		$email=$aff['email'];
 		$pseudo=$aff['pseudo'];
-		$req=mysql_query('update utilisateur set avatar="defaultUser.jpg" where idUti='.$_GET['id']);	
+		$req=mysql_query('update utilisateur set avatar="defaultUser.jpg" where idUti='.$_GET['id']);
 		if($req){
 			mailAvatarIndesirable($email,$pseudo);
 			echo'<script>alert("Avatar par default rétabli et mail d\'avertissement envoyé!!!");indexRedir();</script>';
