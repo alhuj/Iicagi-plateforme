@@ -13,17 +13,17 @@
                                   </a>
                               </li>
                               <li>
-                                  <a href="http://localhost/plateforme/public/forum/recents.php">
+                                  <a href="#">
                                       Sujets récents
                                   </a>
                               </li>
                               <li>
-                                  <a href="http://localhost/plateforme/public/forum/populaires.php">
+                                  <a href="http://localhost/plateforme/public/forum/most_seen.php">
                                       Sujets populaires
                                   </a>
                               </li>
                               <li>
-                                  <a href="http://localhost/plateforme/public/forum/tops.php">
+                                  <a href="http://localhost/plateforme/public/forum/top10.php">
                                       Le top 10
                                   </a>
                               </li>
@@ -33,7 +33,7 @@
                                   </a>
                               </li>
                               <li>
-                                  <a href="http://localhost/plateforme/public/forum/mes_sujets.php">
+                                  <a href="#">
                                       Mes discussions
                                   </a>
                               </li>
@@ -48,8 +48,8 @@
 									</button>
 								</span>
 							</span>
-    					</form>		
+    					</form>
 							  </div>
 
-                         </nav>	
+                         </nav>
 <article style="background:#FFF; padding:70px" class="container">
