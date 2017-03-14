@@ -13,11 +13,6 @@
                                   </a>
                               </li>
                               <li>
-                                  <a href="#">
-                                      Sujets récents
-                                  </a>
-                              </li>
-                              <li>
                                   <a href="http://localhost/plateforme/public/forum/most_seen.php">
                                       Sujets populaires
                                   </a>
