@@ -12,7 +12,7 @@
 	   if(val==true){
 	   	document.location='modifier_Qu.php?idQu='+idQu;
 	   }
-   }
+   }   
    function btnModifGr(idGrp){
 	   var val=(confirm("Voulez-vous modifier le groupe?"))?true:false;
 	   if(val==true){
@@ -32,7 +32,7 @@
 		if(val==true){
 	   		document.location='supprimerQu.php?idQu='+idQu;
 		}
-	}
+	}	
 	function btnSuppGr(idGrp){
 		var val=(confirm("Voulez-vous vraiment supprimer le groupe?"))?true:false;
 		if(val==true){
@@ -53,7 +53,7 @@
 	}
 
 	function newSujet(){
-		document.location='ajouter_sujet.php';
+		document.location='ajouter_sujet.php?id=1';
 	}
   function newSujetGrp(id){
 		document.location='ajouter_sujet.php?id='+id;

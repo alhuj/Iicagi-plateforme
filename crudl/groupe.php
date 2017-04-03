@@ -265,7 +265,7 @@ class groupe{
 						</div><br>
 							<div class='list-group'>
 								<button class='btn btn-lg btn-inverse' onclick='newSujetGrp(".$idGrp.")'><span class='glyphicon glyphicon-pencil' aria-hidden='true'></span> Poser Question</button>
-								<button class='btn btn-lg btn-inverse' onclick='newPartGrp(".$idGrp.")'><span class='glyphicon glyphicon-share' aria-hidden='true'></span> Partager</button>
+								<button class='btn btn-lg btn-inverse' ><span class='glyphicon glyphicon-share' aria-hidden='true'></span> Partager</button>
 								";
 
 								if($_SESSION['id']==$affiche['idUti']){

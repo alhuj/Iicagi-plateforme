@@ -6,7 +6,7 @@ $avatar=(isset($_SESSION['avatar']))? $_SESSION['avatar']:'';
 $idPrivi=(isset($_SESSION['idPrivi']))? (int) $_SESSION['idPrivi']:0;
 $url=$_SERVER['PHP_SELF'] ;
 if(($id1==0) && ($url!='/plateforme/public/index.php'))
-{	
+{
 	echo '<script>alert("Aucune connexion, veuillez vous connecter avant de pouvoir consulter le contenu de cette page.");</script>';
 	header('refresh:0;http://localhost/plateforme/public/index.php');
 	exit;
@@ -45,14 +45,14 @@ echo (!empty($titre))?"<title>".$titre."</title>":"<title> ".$result['sigleEta']
                                    <i>
                                      <?php echo $result['sigleEta']; ?><small> - Plateforme d'entraide</small>
                                    </i>
-                               </b>                          
+                               </b>
                     	   </a>
 
               			</h3>
 <?php
 if($id1!=0){
 	//debut menu
-echo'		
+echo'
                          <ul style="margin-top:20px" class="col-md-6 nav navbar-nav ">
                               <li >
                                   <a href="http://localhost/plateforme/public/index.php">
@@ -70,15 +70,15 @@ echo'
                                   </a>
                               </li>
                               <li>
-                                  <a href="http://localhost/plateforme/public/bibliotheque/index.php">
+                                  <a href="#">
                                       Bibliothèque
                                   </a>
-                              </li>                  
+                              </li>
                               <li>
-                                  <a href="http://localhost/plateforme/public/notifications.ph?id=".$id1>
+                                  <a href="#">
                                       Notifications
                                   </a>
-                              </li>                  
+                              </li>
                          </ul>
 
 	';
@@ -92,7 +92,7 @@ echo'
     <img src="http://localhost/plateforme/banque de donnees/utilisateur avatar/<?php echo $avatar ?>" style="display:block; height:60; width:60px" class="img-responsive profile-image img-circle"/><?php echo $pseudo ?><b class="caret"></b></a>
   	  <ul class="dropdown-menu">
     		<li><a href="http://localhost/plateforme/public/compte.php">Compte</a></li>
-        	<li class="divider"></li>  	  
+        	<li class="divider"></li>
         	<li><a href="http://localhost/plateforme/public/chartes.php">Chartes</a></li>
     		<li><a href="http://localhost/plateforme/public/apropos.php">A propos</a></li>
         	<li class="divider"></li>
@@ -103,10 +103,10 @@ echo'
 </div>
 
 			</div>
-    	</header> 
+    	</header>
 <?php
 }else echo "      </div>
 
-      </header> 
+      </header>
 ";
 ?>

@@ -2,14 +2,10 @@
 //include'../../crudl/fonction.php';
 //$activeMenu = new activeMenu();
 if($id!=0){
-echo'  		         
+echo'
 					 <nav class="navbar ">
                          <ul class="nav navbar-nav col-md-7 navbar-header">
-                              <li>
-                                  <a href="http://localhost/plateforme/admin/panneau.php">
-                                      Accueil
-                                  </a>
-                              </li>
+
                               <li >
                                   <a href="http://localhost/plateforme/admin/utilisateur groupe/index.php">
                                       Utilisateurs/Groupes
@@ -45,9 +41,9 @@ echo'
 	  </div>
     </ul>
 </div>		      </nav>
-			
+
 		</div>
-			</header> 
+			</header>
 
     ';
 }else echo'
